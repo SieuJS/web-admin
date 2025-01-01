@@ -13,6 +13,8 @@ const StudentDetailPage = lazy(
   () => import('@/pages/students/StudentDetailPage')
 );
 
+const ProductPage = lazy(() => import('@/pages/product'));
+
 // ----------------------------------------------------------------------
 
 export default function AppRouter() {
@@ -42,6 +44,10 @@ export default function AppRouter() {
         {
           path: 'form',
           element: <FormPage />
+        },
+        {
+          path: 'product',
+          element: <ProductPage />
         }
       ]
     }

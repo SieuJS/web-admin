@@ -14,6 +14,12 @@ export const navItems: NavItem[] = [
     label: 'Student'
   },
   {
+    title: 'Product',
+    href: '/product',
+    icon: 'product',
+    label: 'Product'
+  },
+  {
     title: 'Login',
     href: '/login',
     icon: 'login',
@@ -148,4 +154,21 @@ export type Employee = {
   latitude?: number; // Optional field
   job: string;
   profile_picture?: string | null; // Profile picture can be a string (URL) or null (if no picture)
+};
+
+export type Product = {
+  id: number;
+  name: string;
+  gender: string;
+  masterCategory: string;
+  subCategory: string;
+  price: number;
+  description: string;
+  baseColour: string;
+  image: string;
+  articleType: string;
+  season: string;
+  year: number;
+  usage: string;
+  quantity: number;
 };

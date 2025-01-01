@@ -53,7 +53,6 @@ export default function DataTable<TData, TValue>({
   const per_page = searchParams?.get('limit') ?? '10';
   const perPageAsNumber = Number(per_page);
   const fallbackPerPage = isNaN(perPageAsNumber) ? 10 : perPageAsNumber;
-
   // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] = React.useState({
     pageIndex: fallbackPage - 1,

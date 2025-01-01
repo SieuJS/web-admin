@@ -1,24 +1,24 @@
 import PageHead from '@/components/shared/page-head';
-import { useGetStudents } from './queries/queries';
-import StudentsTable from './components/student-feed-table';
+import { useGetProducts } from './queries/queries';
+import ProductsTable from './components/products-table';
 import { useSearchParams } from 'react-router-dom';
 import { DataTableSkeleton } from '@/components/shared/data-table-skeleton';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 
-export default function StudentPage() {
+export default function ProductPage() {
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get('page') || 1);
   const pageLimit = Number(searchParams.get('limit') || 10);
-  const country = searchParams.get('search') || null;
-  const offset = (page - 1) * pageLimit;
-  const { data, isLoading } = useGetStudents(offset, pageLimit, country);
-  const users = data?.users;
-  const totalUsers = data?.total_users; //1000
-  const pageCount = Math.ceil(totalUsers / pageLimit);
+
+  const { data, isLoading } = useGetProducts(page, pageLimit);
+  const products = data?.data;
+  const totalProducts = data?.meta.total; //1000
+  const pageCount = data?.meta.lastPage;
 
   if (isLoading) {
     return (
       <div className="p-5">
+        ]
         <DataTableSkeleton
           columnCount={10}
           filterableColumnCount={2}
@@ -30,17 +30,17 @@ export default function StudentPage() {
 
   return (
     <div className="p-4 md:p-8">
-      <PageHead title="Student Management | App" />
+      <PageHead title="Product Management | App" />
       <Breadcrumbs
         items={[
           { title: 'Dashboard', link: '/' },
-          { title: 'Students', link: '/students' }
+          { title: 'Products', link: '/products' }
         ]}
       />
-      <StudentsTable
-        users={users}
+      <ProductsTable
+        products={products}
         page={page}
-        totalUsers={totalUsers}
+        totalProducts={totalProducts}
         pageCount={pageCount}
       />
     </div>
