@@ -11,8 +11,6 @@ export default function ProductPage() {
   const pageLimit = Number(searchParams.get('limit') || 10);
   const master = searchParams.get('master') || null;
   const sub = searchParams.get('sub') || null;
-  const masterCategory = searchParams.get('master') || null;
-  const subCategory = searchParams.get('sub') || null;
   const { data, isLoading } = useGetProducts(page, pageLimit, master, sub);
 
   const products = data?.data;

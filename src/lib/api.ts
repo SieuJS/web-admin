@@ -35,7 +35,7 @@ export async function getProducts(
 ) {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}&master=${master === 'all' ? '' : master}&sub=${sub || ''}`
+      `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}&master=${master === 'all' ? '' : master}&sub=${sub === 'all' ? '' : sub}`
     );
 
     return res.data;
@@ -59,7 +59,7 @@ export async function getMasterCategories() {
 export async function getSubCategories(master: string) {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/v1/category/sub?masterId=${master}`
+      `http://localhost:3000/api/v1/category/sub?master=${master === 'all' ? '' : master}`
     );
 
     return res.data;

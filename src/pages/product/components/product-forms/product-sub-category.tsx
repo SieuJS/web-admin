@@ -7,33 +7,45 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 interface Categories {
   id: string;
   masterCategory: string;
   subCategory: string;
 }
 
-type ProductSubCategoryProps = {
-  master?: string;
-};
-
-export default function ProductSubCategory({
-  master
-}: ProductSubCategoryProps) {
+export default function ProductSubCategory() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const sub = searchParams.get('sub') as string;
+  const master = searchParams.get('master') as string;
   const { data, isLoading } = useGetSubCategories(master);
+
   const subCategories: Categories[] = data;
+
+  const [subCategory, setSubCategory] = useState(sub);
+
+  useEffect(() => {
+    setSearchParams({
+      ...Object.fromEntries(searchParams),
+      sub: subCategory
+    });
+  }, [subCategory, searchParams, setSearchParams]);
 
   return (
     <>
       {isLoading ? (
         <InputSkeleton />
       ) : (
-        <Select>
+        <Select
+          value={subCategory}
+          onValueChange={(value) => setSubCategory(value)}
+        >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder={subCategory} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="system">All Parent Category</SelectItem>
+            <SelectItem value="all">All Subcategory</SelectItem>
             {subCategories.map((category) => (
               <SelectItem key={category.id} value={category.subCategory}>
                 {category.subCategory}

@@ -37,7 +37,7 @@ const ProductMasterCategory = () => {
           onValueChange={(value) => setMasterCategory(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Theme" />
+            <SelectValue placeholder={masterCategory} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Sub Category</SelectItem>

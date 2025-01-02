@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export const useGetProducts = (page, perPage, master, sub) => {
   return useQuery({
-    queryKey: ['products', page, perPage, master],
+    queryKey: ['products', page, perPage, master, sub],
     queryFn: async () => getProducts(page, perPage, master, sub)
   });
 };
