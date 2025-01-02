@@ -3,7 +3,6 @@ import TableSearchInput from '@/components/shared/table-search-input';
 
 import ProductCreateForm from '../product-forms/product-create-form';
 import ProductMasterCategory from '../product-forms/product-master-category';
-import ProductSubCategory from '../product-forms/product-sub-category';
 
 export default function ProductTableActions() {
   return (
@@ -13,7 +12,6 @@ export default function ProductTableActions() {
       </div>
       <div className="flex gap-3">
         <ProductMasterCategory />
-        <ProductSubCategory />
         <PopupModal
           renderModal={(onClose) => <ProductCreateForm modalClose={onClose} />}
         />

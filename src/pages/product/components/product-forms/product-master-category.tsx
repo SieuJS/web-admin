@@ -9,6 +9,7 @@ import {
   SelectValue
 } from '@/components/ui/select';
 import { useSearchParams } from 'react-router-dom';
+import ProductSubCategory from './product-sub-category';
 interface MasterCategory {
   masterCategory: string;
 }
@@ -23,7 +24,8 @@ const ProductMasterCategory = () => {
   useEffect(() => {
     setSearchParams({
       ...Object.fromEntries(searchParams),
-      master: masterCategory
+      master: masterCategory,
+      sub: 'all'
     });
   }, [masterCategory, searchParams, setSearchParams]);
 
@@ -32,29 +34,32 @@ const ProductMasterCategory = () => {
       {isLoading ? (
         <InputSkeleton />
       ) : (
-        <Select
-          value={masterCategory}
-          onValueChange={(value) => setMasterCategory(value)}
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue
-              placeholder={
-                masterCategory === 'all' ? 'All Sub Category' : master
-              }
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Sub Category</SelectItem>
-            {masterCategories.map((category) => (
-              <SelectItem
-                key={category.masterCategory}
-                value={category.masterCategory}
-              >
-                {category.masterCategory}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <>
+          <Select
+            value={masterCategory}
+            onValueChange={(value) => setMasterCategory(value)}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue
+                placeholder={
+                  masterCategory === 'all' ? 'All Sub Category' : master
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Sub Category</SelectItem>
+              {masterCategories.map((category) => (
+                <SelectItem
+                  key={category.masterCategory}
+                  value={category.masterCategory}
+                >
+                  {category.masterCategory}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <ProductSubCategory master={master} />
+        </>
       )}
     </>
   );

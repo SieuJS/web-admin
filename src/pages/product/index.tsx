@@ -27,7 +27,6 @@ export default function ProductPage() {
   if (isLoading) {
     return (
       <div className="p-5">
-        ]
         <DataTableSkeleton
           columnCount={10}
           filterableColumnCount={2}
