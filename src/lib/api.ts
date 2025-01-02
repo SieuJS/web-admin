@@ -27,10 +27,15 @@ export async function getStudents(
   }
 }
 
-export async function getProducts(page: number, perPage: number) {
+export async function getProducts(
+  page: number,
+  perPage: number,
+  master: string,
+  sub: string
+) {
   try {
     const res = await axios.get(
-      `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}`
+      `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}&master=${master === 'all' ? '' : master}&sub=${sub || ''}`
     );
 
     return res.data;

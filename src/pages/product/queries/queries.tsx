@@ -1,10 +1,10 @@
 import { getMasterCategories, getProducts, getSubCategories } from '@/lib/api';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetProducts = (page, perPage) => {
+export const useGetProducts = (page, perPage, master, sub) => {
   return useQuery({
-    queryKey: ['products', page, perPage],
-    queryFn: async () => getProducts(page, perPage)
+    queryKey: ['products', page, perPage, master],
+    queryFn: async () => getProducts(page, perPage, master, sub)
   });
 };
 
