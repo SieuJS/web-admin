@@ -1,5 +1,6 @@
 import DataTable from '@/components/shared/data-table';
 import { columns } from './columns';
+import ProductTableActions from './product-table-action';
 
 type TPRoductsTableProps = {
   products: any;
@@ -14,6 +15,7 @@ export default function ProductsTable({
 }: TPRoductsTableProps) {
   return (
     <>
+      <ProductTableActions />
       {products && (
         <DataTable columns={columns} data={products} pageCount={pageCount} />
       )}
