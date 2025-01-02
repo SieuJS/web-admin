@@ -28,10 +28,33 @@ export async function getStudents(
 }
 
 export async function getProducts(page: number, perPage: number) {
-  console.log('page in call', page);
   try {
     const res = await axios.get(
       `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}`
+    );
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getMasterCategories() {
+  try {
+    const res = await axios.get(`http://localhost:3000/api/v1/category/master`);
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getSubCategories(master: string) {
+  try {
+    const res = await axios.get(
+      `http://localhost:3000/api/v1/category/sub?masterId=${master}`
     );
 
     return res.data;
