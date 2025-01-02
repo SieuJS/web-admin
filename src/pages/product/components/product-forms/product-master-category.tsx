@@ -17,7 +17,7 @@ const ProductMasterCategory = () => {
   const { data, isLoading } = useGetMasterCategories();
   const masterCategories: MasterCategory[] = data;
   const [searchParams, setSearchParams] = useSearchParams();
-  const master = searchParams.get('master') as string;
+  const master = searchParams.get('master') || 'all';
   const [masterCategory, setMasterCategory] = useState(master);
 
   useEffect(() => {
@@ -37,7 +37,11 @@ const ProductMasterCategory = () => {
           onValueChange={(value) => setMasterCategory(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={masterCategory} />
+            <SelectValue
+              placeholder={
+                masterCategory === 'all' ? 'All Sub Category' : master
+              }
+            />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Sub Category</SelectItem>

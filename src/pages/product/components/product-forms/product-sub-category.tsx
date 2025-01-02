@@ -17,8 +17,8 @@ interface Categories {
 
 export default function ProductSubCategory() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const sub = searchParams.get('sub') as string;
-  const master = searchParams.get('master') as string;
+  const sub = searchParams.get('sub');
+  const master = searchParams.get('master');
   const { data, isLoading } = useGetSubCategories(master);
 
   const subCategories: Categories[] = data;
@@ -28,21 +28,20 @@ export default function ProductSubCategory() {
   useEffect(() => {
     setSearchParams({
       ...Object.fromEntries(searchParams),
-      sub: subCategory
+      sub: subCategory || ''
     });
   }, [subCategory, searchParams, setSearchParams]);
-
   return (
     <>
       {isLoading ? (
         <InputSkeleton />
       ) : (
         <Select
-          value={subCategory}
+          value={subCategory || ''}
           onValueChange={(value) => setSubCategory(value)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder={subCategory} />
+            <SelectValue placeholder={subCategory || 'All Subcategory'} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Subcategory</SelectItem>
