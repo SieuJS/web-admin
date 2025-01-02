@@ -28,16 +28,21 @@ export async function getStudents(
 }
 
 export async function getProducts(
-  page: number,
-  perPage: number,
+  search: string,
   master: string,
-  sub: string
+  sub: string,
+  page: number,
+  perPage: number
 ) {
   try {
+    const searchQuery = search ? `&search=${search}` : '';
+    const masterQuery = master
+      ? `&master=${master === 'all' ? '' : master}`
+      : '';
+    const subQuery = sub ? `&sub=${sub === 'all' ? '' : sub}` : '';
     const res = await axios.get(
-      `http://localhost:3000/api/v1/product?page=${page}&perPage=${perPage}&master=${master === 'all' ? '' : master}&sub=${sub === 'all' ? '' : sub}`
+      `http://localhost:3000/api/v1/product?${searchQuery}${masterQuery}${subQuery}&page=${page}&perPage=${perPage} `
     );
-
     return res.data;
   } catch (error) {
     console.log(error);

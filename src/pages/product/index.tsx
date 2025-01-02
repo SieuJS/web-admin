@@ -10,8 +10,15 @@ export default function ProductPage() {
   const page = Number(searchParams.get('page') || 1);
   const pageLimit = Number(searchParams.get('limit') || 10);
   const master = searchParams.get('master') || null;
+  const search = searchParams.get('search') || null;
   const sub = searchParams.get('sub') || null;
-  const { data, isLoading } = useGetProducts(page, pageLimit, master, sub);
+  const { data, isLoading } = useGetProducts(
+    search,
+    master,
+    sub,
+    page,
+    pageLimit
+  );
 
   const products = data?.data;
   const totalProducts = data?.meta.total; //1000
