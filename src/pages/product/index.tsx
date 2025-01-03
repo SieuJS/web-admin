@@ -12,8 +12,8 @@ export default function ProductPage() {
   const master = searchParams.get('master');
   const search = searchParams.get('search');
   const sub = searchParams.get('sub');
-  const orderBy = searchParams.get('orderBy');
-  const order = searchParams.get('order');
+  const orderBy = searchParams.get('orderBy') || '';
+  const order = searchParams.get('order') || '';
   const { data, isLoading } = useGetProducts(
     search,
     master,

@@ -26,6 +26,18 @@ export default function ProductSortForm() {
       orderBy: sort.orderBy || '',
       order: sort.order || ''
     });
+
+    setSelected(
+      sort.orderBy === 'price' && sort.order === 'asc'
+        ? 'price-low'
+        : sort.orderBy === 'price' && sort.order === 'desc'
+          ? 'price-high'
+          : sort.orderBy === 'year' && sort.order === 'desc'
+            ? 'newest'
+            : sort.orderBy === 'year' && sort.order === 'asc'
+              ? 'oldest'
+              : 'newest'
+    );
   }, [searchParams, setSearchParams, sort]);
 
   const handleSort = (value) => {

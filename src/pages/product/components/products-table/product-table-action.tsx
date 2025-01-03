@@ -1,7 +1,7 @@
 import PopupModal from '@/components/shared/popup-modal';
 import TableSearchInput from '@/components/shared/table-search-input';
 
-import ProductCreateForm from '../product-forms/product-create-form';
+import ProductCreateForm from '../product-forms/product-upload-image-form';
 import ProductMasterCategory from '../product-forms/product-master-category';
 import ProductSortForm from '../product-forms/product-sort-form';
 
