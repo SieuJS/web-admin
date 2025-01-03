@@ -9,15 +9,19 @@ export default function ProductPage() {
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get('page') || 1);
   const pageLimit = Number(searchParams.get('limit') || 10);
-  const master = searchParams.get('master') || null;
-  const search = searchParams.get('search') || null;
-  const sub = searchParams.get('sub') || null;
+  const master = searchParams.get('master');
+  const search = searchParams.get('search');
+  const sub = searchParams.get('sub');
+  const orderBy = searchParams.get('orderBy');
+  const order = searchParams.get('order');
   const { data, isLoading } = useGetProducts(
     search,
     master,
     sub,
     page,
-    pageLimit
+    pageLimit,
+    orderBy,
+    order
   );
 
   const products = data?.data;

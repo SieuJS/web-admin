@@ -32,7 +32,9 @@ export async function getProducts(
   master: string,
   sub: string,
   page: number,
-  perPage: number
+  perPage: number,
+  orderBy: string,
+  order: string
 ) {
   try {
     const searchQuery = search ? `&search=${search}` : '';
@@ -41,7 +43,7 @@ export async function getProducts(
       : '';
     const subQuery = sub ? `&sub=${sub === 'all' ? '' : sub}` : '';
     const res = await axios.get(
-      `http://localhost:3000/api/v1/product?${searchQuery}${masterQuery}${subQuery}&page=${page}&perPage=${perPage} `
+      `http://localhost:3000/api/v1/product?${searchQuery}${masterQuery}${subQuery}&page=${page}&perPage=${perPage}&orderBy=${orderBy}&order=${order} `
     );
     return res.data;
   } catch (error) {
