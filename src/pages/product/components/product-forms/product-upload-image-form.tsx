@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,26 +10,46 @@ import {
   FormField,
   FormItem,
   FormControl,
-  FormMessage
+  FormMessage,
+  FormLabel
 } from '@/components/ui/form';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getCategoryState,
+  loadAllCategories
+} from '@/redux/features/category/categorySlice';
+import { getSubCategories } from '@/lib/api';
 import Heading from '@/components/shared/heading';
 import { Textarea } from '@/components/ui/textarea';
-
-const productFormSchema = z.object({
-  name: z.string().nonempty('Name is required'),
-  price: z.number().positive('Price must be positive'),
-  description: z.string().optional()
-});
-
-type ProductFormSchemaType = z.infer<typeof productFormSchema>;
+import MasterCategorySelecter from '../category/master-category-selecter';
+import SubCategorySelecter from '../category/sub-category-selecter';
+import { RootState } from '@/redux/store';
+import { ToastAction } from '@radix-ui/react-toast';
+import { toast } from '@/hooks/use-toast';
+import { ProductFormSchemaType, productFormSchema } from '@/lib/api';
 
 const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    getSubCategories('all').then((data) => {
+      dispatch(loadAllCategories(data));
+    });
+  }, []);
+  const selectCategory = useSelector((state: RootState) =>
+    getCategoryState(state)
+  );
+
   const [images, setImages] = useState<File[]>([]);
   const form = useForm<ProductFormSchemaType>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {}
   });
+
+  useEffect(() => {
+    form.setValue('masterCategory', selectCategory.masterSelected);
+    form.setValue('subCategory', selectCategory.subSelected);
+    form.setValue('images', images as any);
+  }, [form, selectCategory, images]);
 
   const onDrop = (acceptedFiles: File[]) => {
     setImages([...images, ...acceptedFiles]);
@@ -44,7 +63,23 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
   const onSubmit = (values: ProductFormSchemaType) => {
     // Do something with the form values and images.
     // ✅ This will be type-safe and validated.
-    console.log(values, images);
+    const { masterSelected, subSelected } = selectCategory;
+    if (!subSelected || !masterSelected) {
+      console.log('Select Category');
+      toast({
+        title: 'Select Category',
+        description: 'Please select category',
+        variant: 'destructive',
+        action: <ToastAction altText="Close">Close</ToastAction>
+      });
+      return;
+    }
+    console.log('values', values);
+    toast({
+      title: 'Select Category',
+      description: 'Send category',
+      action: <ToastAction altText="Close">Close</ToastAction>
+    });
   };
 
   return (
@@ -62,6 +97,8 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>Name</FormLabel>
+
                   <FormControl>
                     <Input
                       placeholder="Enter product name"
@@ -78,6 +115,8 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
               name="price"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>Price</FormLabel>
+
                   <FormControl>
                     <Input
                       placeholder="Enter product price"
@@ -94,6 +133,8 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
               name="description"
               render={({ field }) => (
                 <FormItem className="col-span-2">
+                  <FormLabel>Description</FormLabel>
+
                   <FormControl>
                     <Textarea
                       placeholder="Enter product description"
@@ -105,12 +146,162 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="quantity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Quantity</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product quantity"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product status"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="season"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Season</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product season"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="year"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Year</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product year"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gender</FormLabel>
+
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product gender"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="baseColor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Base Color</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter product base color"
+                      {...field}
+                      className="px-4 py-6 shadow-inner drop-shadow-xl"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="masterCategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sub Category</FormLabel>
+                  <FormControl>
+                    <MasterCategorySelecter />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subCategory"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Sub Category</FormLabel>
+                  <FormControl>
+                    <SubCategorySelecter />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
 
-          <div {...getRootProps()} className="mt-4 border-2 border-dashed p-4">
-            <input {...getInputProps()} />
-            <p>Drag 'n' drop some files here, or click to select files</p>
-          </div>
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <div
+                    {...getRootProps()}
+                    className="mt-4 border-2 border-dashed p-4"
+                  >
+                    <input {...getInputProps()} />
+                    <p>
+                      Drag 'n' drop some files here, or click to select files
+                    </p>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <div className="mt-4 grid grid-cols-3 gap-4">
             {images.map((file, index) => (
               <div key={index} className="relative">

@@ -1,5 +1,10 @@
-import { getMasterCategories, getProducts, getSubCategories } from '@/lib/api';
-import { useQuery } from '@tanstack/react-query';
+import {
+  getMasterCategories,
+  getProducts,
+  getSubCategories,
+  uploadProduct
+} from '@/lib/api';
+import { useQuery, useMutation } from '@tanstack/react-query';
 
 export const useGetProducts = (
   search,
@@ -28,5 +33,11 @@ export const useGetSubCategories = (master) => {
   return useQuery({
     queryKey: ['sub-categories', master],
     queryFn: async () => getSubCategories(master)
+  });
+};
+
+export const useCreateProduct = () => {
+  return useMutation({
+    mutationFn: uploadProduct
   });
 };
