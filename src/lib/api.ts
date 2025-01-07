@@ -1,18 +1,7 @@
 import axios from 'axios';
 import { z } from 'zod';
-// ---------------------------- Student API ------------------------------------------------- //
-// export async function resendEmail(email: string) {
-//     try {
-//       const res = await axios.post("/auth/register/resend-email/", { email });
-//       return res.data;
-//     } catch (error) {
-//       console.log(error);
-//       return error;
-//     }
-// }
 
-const HOST = 'http://localhost:3000';
-
+const HOST = import.meta.env.VITE_HOST_API;
 export async function getStudents(
   offset: number,
   pageLimit: number,

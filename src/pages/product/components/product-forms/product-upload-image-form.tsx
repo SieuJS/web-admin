@@ -27,6 +27,7 @@ import { RootState } from '@/redux/store';
 import { ToastAction } from '@radix-ui/react-toast';
 import { toast } from '@/hooks/use-toast';
 import { ProductFormSchemaType, productFormSchema } from '@/lib/api';
+import { useCreateProduct } from '../../queries/queries';
 
 const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
   const dispatch = useDispatch();
@@ -55,6 +56,8 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
     setImages([...images, ...acceptedFiles]);
   };
 
+  const createProduct = useCreateProduct();
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: { 'image/*': [] },
     onDrop
@@ -74,7 +77,8 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
       });
       return;
     }
-    console.log('values', values);
+    createProduct.mutate(values);
+
     toast({
       title: 'Select Category',
       description: 'Send category',
