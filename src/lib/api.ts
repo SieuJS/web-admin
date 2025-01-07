@@ -76,7 +76,7 @@ export const productFormSchema = z.object({
   season: z.enum(['summer', 'winter', 'spring', 'autumn']),
   year: z.coerce.number().min(2000).max(2025),
   gender: z.enum(['male', 'female', 'unisex']),
-  baseColor: z.string(),
+  baseColour: z.string(),
   images: z.array(z.instanceof(File)).nonempty('Images are required'),
   masterCategory: z.string().nonempty('Master category is required'),
   subCategory: z.string().nonempty('Sub category is required')

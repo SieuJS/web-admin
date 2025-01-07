@@ -242,7 +242,7 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
             />
             <FormField
               control={form.control}
-              name="baseColor"
+              name="baseColour"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Base Color</FormLabel>
