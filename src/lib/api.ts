@@ -97,3 +97,13 @@ export async function uploadProduct(formData: ProductFormSchemaType) {
     return error;
   }
 }
+
+export async function getProductById(id: string) {
+  try {
+    const res = await axios.get(`${HOST}/api/v1/product/admin/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}

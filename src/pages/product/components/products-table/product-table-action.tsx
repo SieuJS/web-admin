@@ -1,11 +1,12 @@
-import PopupModal from '@/components/shared/popup-modal';
 import TableSearchInput from '@/components/shared/table-search-input';
 
-import ProductCreateForm from '../product-forms/product-upload-image-form';
+import { useRouter } from '@/routes/hooks';
 import ProductMasterCategory from '../product-forms/product-master-category';
 import ProductSortForm from '../product-forms/product-sort-form';
+import { Button } from '@/components/ui/button';
 
 export default function ProductTableActions() {
+  const router = useRouter();
   return (
     <div className="flex items-center justify-between gap-3 py-5">
       <div className="flex flex-1 gap-4">
@@ -20,11 +21,14 @@ export default function ProductTableActions() {
           <ProductMasterCategory />
         </div>
         <div className="col-span-1">
-          <PopupModal
-            renderModal={(onClose) => (
-              <ProductCreateForm modalClose={onClose} />
-            )}
-          />
+          <Button
+            className="text-xs md:text-sm"
+            onClick={() => {
+              router.push('/product/create');
+            }}
+          >
+            Add new
+          </Button>
         </div>
       </div>
     </div>

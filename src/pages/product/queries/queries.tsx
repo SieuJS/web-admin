@@ -1,5 +1,6 @@
 import {
   getMasterCategories,
+  getProductById,
   getProducts,
   getSubCategories,
   uploadProduct
@@ -39,5 +40,12 @@ export const useGetSubCategories = (master) => {
 export const useCreateProduct = () => {
   return useMutation({
     mutationFn: uploadProduct
+  });
+};
+
+export const useGetProductById = (id) => {
+  return useQuery({
+    queryKey: [],
+    queryFn: async () => getProductById(id)
   });
 };

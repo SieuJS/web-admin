@@ -228,7 +228,6 @@ const ProductCreateForm = ({ modalClose }: { modalClose: () => void }) => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Gender</FormLabel>
-
                   <FormControl>
                     <Input
                       placeholder="Enter product gender"

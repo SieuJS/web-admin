@@ -1,5 +1,7 @@
 import FormPage from '@/pages/form';
 import NotFound from '@/pages/not-found';
+import ProductCreatePage from '@/pages/product/create';
+import ProductDetailPage from '@/pages/product/detail';
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 
@@ -48,6 +50,14 @@ export default function AppRouter() {
         {
           path: 'product',
           element: <ProductPage />
+        },
+        {
+          path: 'product/:id',
+          element: <ProductDetailPage />
+        },
+        {
+          path: 'product/create',
+          element: <ProductCreatePage />
         }
       ]
     }
