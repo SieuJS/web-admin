@@ -3,6 +3,8 @@ import {
   getProductById,
   getProducts,
   getSubCategories,
+  ProductFormSchemaType,
+  updateProduct,
   uploadProduct
 } from '@/lib/api';
 import { useQuery, useMutation } from '@tanstack/react-query';
@@ -47,5 +49,11 @@ export const useGetProductById = (id) => {
   return useQuery({
     queryKey: [],
     queryFn: async () => getProductById(id)
+  });
+};
+
+export const useUpdateProduct = () => {
+  return useMutation({
+    mutationFn: updateProduct
   });
 };

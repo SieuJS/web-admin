@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom';
 import {
   Form,
   FormControl,
@@ -13,6 +12,17 @@ import {
   getSubCategories,
   productFormSchema
 } from '@/lib/api';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,21 +32,27 @@ import MasterCategorySelecter from './components/category/master-category-select
 import SubCategorySelecter from './components/category/sub-category-selecter';
 import { useRouter } from '@/routes/hooks';
 import { useEffect, useState } from 'react';
-import { UploadDropzone } from '@bytescale/upload-widget-react';
+import { UploadButton } from '@bytescale/upload-widget-react';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/redux/store';
 import {
   getCategoryState,
-  loadAllCategories,
-  selectMasterCategory,
-  selectSubCategory
+  loadAllCategories
 } from '@/redux/features/category/categorySlice';
-
+import { useCreateProduct } from './queries/queries';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 const options = {
   apiKey: 'public_12a1zEmARBeezfGPFXGCm3iswBmL', // This is your API key.
   maxFileCount: 1,
   showFinishButton: true, // Note: You must use 'onUpdate' if you set 'showFinishButton: false' (default).
+  mimeTypes: ['image/jpeg'],
   styles: {
     colors: {
       primary: '#377dff'
@@ -45,31 +61,35 @@ const options = {
 };
 export default function ProductCreatePage() {
   const dispatch = useDispatch();
-
-  const params = useParams();
+  const { mutate, isPending, isSuccess } = useCreateProduct();
   useEffect(() => {
     getSubCategories('all').then((data) => {
       dispatch(loadAllCategories(data));
     });
   }, []);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useForm<ProductFormSchemaType>({
     resolver: zodResolver(productFormSchema),
     defaultValues: {}
   });
   const router = useRouter();
-  const onSubmit = (values: ProductFormSchemaType) => {
+  useEffect(() => {
+    if (isPending) {
+      setIsSubmitting(true);
+    }
+  }, [isPending]);
+  const onSubmit = async (values: ProductFormSchemaType) => {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+    // ✅ This will be type-safe and validated.\
+    setIsSubmitting(true);
     console.log(values);
+    mutate(values);
   };
 
   const selectCategory = useSelector((state: RootState) =>
     getCategoryState(state)
   );
   const [images, setImages] = useState<string[]>([]);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     form.setValue('images', images as any);
@@ -78,11 +98,48 @@ export default function ProductCreatePage() {
   }, [selectCategory, images]);
 
   const onDrop = (acceptedFiles: string[]) => {
+    console.log('accept', acceptedFiles);
     setImages([...images, ...acceptedFiles]);
   };
 
+  const contentOnLoading = (
+    <>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Dialog Title</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogDescription>Creating Product....</AlertDialogDescription>
+        <AlertDialogFooter></AlertDialogFooter>
+      </AlertDialogContent>
+    </>
+  );
+
+  const contentOnSuccess = (
+    <>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Dialog Title</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogDescription>
+          Product Created Successfully
+        </AlertDialogDescription>
+        <AlertDialogFooter>
+          <AlertDialogAction onClick={() => router.reload()}>
+            Create more
+          </AlertDialogAction>
+          <AlertDialogAction onClick={() => router.push('/product')}>
+            Go to Product List
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </>
+  );
+
   return (
     <Card className="container mx-auto h-full overflow-scroll p-4">
+      <AlertDialog open={isSubmitting} onOpenChange={setIsSubmitting}>
+        {isPending ? contentOnLoading : contentOnSuccess}
+      </AlertDialog>
       <CardHeader>
         <h2 className="text-2xl font-bold">Update Product</h2>
       </CardHeader>
@@ -170,11 +227,22 @@ export default function ProductCreatePage() {
                     <FormLabel>Status</FormLabel>
 
                     <FormControl>
-                      <Input
-                        placeholder="Enter product status"
-                        {...field}
-                        className="px-4 py-6 shadow-inner drop-shadow-xl"
-                      />
+                      <Select {...field}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Enter product status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem key="active" value="instock">
+                            In stock
+                          </SelectItem>
+                          <SelectItem key="active" value="outofstock">
+                            Out of stock
+                          </SelectItem>
+                          <SelectItem key="suspend" value="suspend">
+                            Suspending
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -285,19 +353,18 @@ export default function ProductCreatePage() {
                 <FormItem>
                   <FormControl>
                     <div className="mt-4 border-2 border-dashed p-4">
-                      <UploadDropzone
+                      <UploadButton
                         options={options}
-                        onUpdate={({ uploadedFiles }) =>
-                          console.log(
-                            uploadedFiles.map((x) => x.fileUrl).join('\n')
-                          )
-                        }
-                        onComplete={(files) =>
-                          onDrop(files.map((x) => x.fileUrl))
-                        }
-                        width="600px"
-                        height="375px"
-                      />
+                        onComplete={(files) => {
+                          onDrop(files.map((file) => file.fileUrl));
+                        }}
+                      >
+                        {({ onClick }) => (
+                          <Button onClick={onClick} type="button">
+                            Upload a file...
+                          </Button>
+                        )}
+                      </UploadButton>
                     </div>
                   </FormControl>
                   <FormMessage />

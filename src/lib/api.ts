@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { z } from 'zod';
+import { string, z } from 'zod';
 
 const HOST = import.meta.env.VITE_HOST_API;
 export async function getStudents(
@@ -77,7 +77,7 @@ export const productFormSchema = z.object({
   year: z.coerce.number().min(2000).max(2025),
   gender: z.enum(['male', 'female', 'unisex']),
   baseColour: z.string(),
-  images: z.array(z.instanceof(File)).nonempty('Images are required'),
+  images: z.array(string()).nonempty('Images are required'),
   masterCategory: z.string().nonempty('Master category is required'),
   subCategory: z.string().nonempty('Sub category is required')
 });
@@ -88,7 +88,7 @@ export async function uploadProduct(formData: ProductFormSchemaType) {
   try {
     const res = await axios.post(`${HOST}/api/v1/product/upload`, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/json'
       }
     });
     return res.data;
@@ -101,6 +101,26 @@ export async function uploadProduct(formData: ProductFormSchemaType) {
 export async function getProductById(id: string) {
   try {
     const res = await axios.get(`${HOST}/api/v1/product/admin/${id}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function updateProduct({
+  id,
+  formData
+}: {
+  id: string;
+  formData: ProductFormSchemaType;
+}) {
+  try {
+    const res = await axios.patch(`${HOST}/api/v1/product/${id}`, formData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
     return res.data;
   } catch (error) {
     console.log(error);

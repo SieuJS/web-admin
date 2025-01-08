@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useGetProductById } from './queries/queries';
+import { useGetProductById, useUpdateProduct } from './queries/queries';
 import {
   Form,
   FormControl,
@@ -14,6 +14,13 @@ import {
   getSubCategories,
   productFormSchema
 } from '@/lib/api';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -23,7 +30,17 @@ import MasterCategorySelecter from './components/category/master-category-select
 import SubCategorySelecter from './components/category/sub-category-selecter';
 import { useRouter } from '@/routes/hooks';
 import { useEffect, useState } from 'react';
-import { UploadDropzone } from '@bytescale/upload-widget-react';
+import { UploadButton, UploadDropzone } from '@bytescale/upload-widget-react';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from '@/components/ui/alert-dialog';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/redux/store';
@@ -38,6 +55,7 @@ const options = {
   apiKey: 'public_12a1zEmARBeezfGPFXGCm3iswBmL', // This is your API key.
   maxFileCount: 1,
   showFinishButton: true, // Note: You must use 'onUpdate' if you set 'showFinishButton: false' (default).
+  mimeTypes: ['image/jpeg'],
   styles: {
     colors: {
       primary: '#377dff'
@@ -46,7 +64,8 @@ const options = {
 };
 export default function ProductDetailPage() {
   const dispatch = useDispatch();
-
+  const { mutate, isPending, isSuccess } = useUpdateProduct();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const params = useParams();
   useEffect(() => {
     getSubCategories('all').then((data) => {
@@ -58,11 +77,19 @@ export default function ProductDetailPage() {
     resolver: zodResolver(productFormSchema),
     defaultValues: {}
   });
+  useEffect(() => {
+    if (isPending) {
+      setIsSubmitting(true);
+    }
+  }, [isPending]);
   const router = useRouter();
   const onSubmit = (values: ProductFormSchemaType) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    mutate({
+      id: params.id as string,
+      formData: values
+    });
   };
   const product = data;
 
@@ -70,8 +97,6 @@ export default function ProductDetailPage() {
     getCategoryState(state)
   );
   const [images, setImages] = useState<string[]>([]);
-
-  useEffect(() => {}, []);
 
   useEffect(() => {
     if (product) {
@@ -87,9 +112,7 @@ export default function ProductDetailPage() {
       form.setValue('baseColour', product.baseColour);
       setImages(product.images.map((image) => image.image));
       getSubCategories('all').then((data) => {
-        console.log('load all', category);
         dispatch(loadAllCategories(data));
-        console.log('load 1', category);
         dispatch(selectMasterCategory(category.masterCategory));
         dispatch(selectSubCategory(category.subCategory));
       });
@@ -103,11 +126,47 @@ export default function ProductDetailPage() {
   }, [selectCategory, images]);
 
   const onDrop = (acceptedFiles: string[]) => {
-    setImages([...images, ...acceptedFiles]);
+    setImages((prev) => [...prev, ...acceptedFiles]);
   };
+
+  const contentOnLoading = (
+    <>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Dialog Title</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogDescription>Creating Product....</AlertDialogDescription>
+        <AlertDialogFooter></AlertDialogFooter>
+      </AlertDialogContent>
+    </>
+  );
+
+  const contentOnSuccess = (
+    <>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Dialog Title</AlertDialogTitle>
+        </AlertDialogHeader>
+        <AlertDialogDescription>
+          Product Created Successfully
+        </AlertDialogDescription>
+        <AlertDialogFooter>
+          <AlertDialogAction onClick={() => router.reload()}>
+            Re check the info
+          </AlertDialogAction>
+          <AlertDialogAction onClick={() => router.push('/product')}>
+            Go to Product List
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </>
+  );
 
   return (
     <Card className="container mx-auto h-full overflow-scroll p-4">
+      <AlertDialog open={isSubmitting} onOpenChange={setIsSubmitting}>
+        {isPending ? contentOnLoading : contentOnSuccess}
+      </AlertDialog>
       <CardHeader>
         <h2 className="text-2xl font-bold">Update Product</h2>
       </CardHeader>
@@ -198,11 +257,30 @@ export default function ProductDetailPage() {
                       <FormLabel>Status</FormLabel>
 
                       <FormControl>
-                        <Input
-                          placeholder="Enter product status"
-                          {...field}
-                          className="px-4 py-6 shadow-inner drop-shadow-xl"
-                        />
+                        <Select
+                          value={form.getValues('status')}
+                          onValueChange={(value: any) =>
+                            form.setValue('status', value)
+                          }
+                        >
+                          <SelectTrigger>
+                            <SelectValue
+                              defaultValue={product.status}
+                              placeholder="Enter product status"
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem key="instock" value="instock">
+                              In stock
+                            </SelectItem>
+                            <SelectItem key="outofstock" value="outstock">
+                              Out of stock
+                            </SelectItem>
+                            <SelectItem key="suspend" value="suspend">
+                              Suspending
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -313,19 +391,18 @@ export default function ProductDetailPage() {
                   <FormItem>
                     <FormControl>
                       <div className="mt-4 border-2 border-dashed p-4">
-                        <UploadDropzone
+                        <UploadButton
                           options={options}
-                          onUpdate={({ uploadedFiles }) =>
-                            console.log(
-                              uploadedFiles.map((x) => x.fileUrl).join('\n')
-                            )
-                          }
-                          onComplete={(files) =>
-                            onDrop(files.map((x) => x.fileUrl))
-                          }
-                          width="600px"
-                          height="375px"
-                        />
+                          onComplete={(files) => {
+                            onDrop(files.map((file) => file.fileUrl));
+                          }}
+                        >
+                          {({ onClick }) => (
+                            <Button onClick={onClick} type="button">
+                              Upload a file...
+                            </Button>
+                          )}
+                        </UploadButton>
                       </div>
                     </FormControl>
                     <FormMessage />
@@ -364,7 +441,7 @@ export default function ProductDetailPage() {
                   Cancel
                 </Button>
                 <Button type="submit" className="rounded-full" size="lg">
-                  Create Product
+                  Update Product
                 </Button>
               </div>
             </form>
