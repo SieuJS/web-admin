@@ -20,6 +20,12 @@ export const navItems: NavItem[] = [
     label: 'Product'
   },
   {
+    title: 'User',
+    href: '/user',
+    icon: 'user',
+    label: 'User'
+  },
+  {
     title: 'Login',
     href: '/login',
     icon: 'login',
@@ -171,4 +177,13 @@ export type Product = {
   year: number;
   usage: string;
   quantity: number;
+};
+
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: Date;
+  status: string;
 };

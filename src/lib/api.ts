@@ -127,3 +127,43 @@ export async function updateProduct({
     return error;
   }
 }
+
+export type UserQuery = {
+  page: number;
+  pageLimit: number;
+  name: string | null;
+  email: string | null;
+  orderBy: string;
+  order: string;
+};
+
+export async function getListUser({
+  page,
+  pageLimit,
+  name,
+  email,
+  orderBy,
+  order
+}: UserQuery) {
+  try {
+    const res = await axios.get(
+      `${HOST}/api/v1/user/list?page=${page}&limit=${pageLimit}&name=${name || ''}&email=${email || ''}&orderBy=${orderBy || ''}&order=${order || ''}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function banUser({ id, isBan }: { id: string; isBan: boolean }) {
+  if (isBan) {
+    try {
+      const res = await axios.patch(`${HOST}/api/v1/user/ban/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+}

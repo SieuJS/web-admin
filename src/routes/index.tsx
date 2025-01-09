@@ -4,7 +4,7 @@ import ProductCreatePage from '@/pages/product/create';
 import ProductDetailPage from '@/pages/product/detail';
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
-
+import UserPage from '@/pages/user';
 const DashboardLayout = lazy(
   () => import('@/components/layout/dashboard-layout')
 );
@@ -58,6 +58,10 @@ export default function AppRouter() {
         {
           path: 'product/create',
           element: <ProductCreatePage />
+        },
+        {
+          path: 'user',
+          element: <UserPage />
         }
       ]
     }
