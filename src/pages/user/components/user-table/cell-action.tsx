@@ -13,6 +13,8 @@ import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from '@/routes/hooks';
 import React, { useState } from 'react';
 import { useBanUser } from '../../queries/queries';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 interface CellActionProps {
   data: User;
 }
@@ -23,8 +25,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [unBanId, setUnBanId] = useState<string>('');
   const router = useRouter();
   const { mutate: banUser, isPending, isSuccess } = useBanUser();
+  const { user } = useSelector((state: RootState) => state.auth);
   const onConfirm = async () => {
     if (banId !== '') {
+      if (user?.id === banId) {
+        window.alert("You can't ban yourself");
+        return;
+      }
       await banUser({
         id: banId,
         isBan: true

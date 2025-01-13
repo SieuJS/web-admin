@@ -30,12 +30,6 @@ export const navItems: NavItem[] = [
     href: '/order',
     icon: 'order',
     label: 'Order'
-  },
-  {
-    title: 'Login',
-    href: '/login',
-    icon: 'login',
-    label: 'Login'
   }
 ];
 

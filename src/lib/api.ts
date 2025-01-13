@@ -163,7 +163,7 @@ export async function banUser({ id, isBan }: { id: string; isBan: boolean }) {
       return res.data;
     } catch (error) {
       console.log(error);
-      return error;
+      throw error;
     }
   } else {
     try {
@@ -219,5 +219,50 @@ export async function getOrder(orderId: string) {
   } catch (error) {
     console.log(error);
     return error;
+  }
+}
+
+export async function login({ username, password }) {
+  try {
+    const res = await axios.post(
+      `${HOST}/api/v1/user/login`,
+      {
+        username,
+        password
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getProfile() {
+  try {
+    const res = await axios.get(`${HOST}/api/v1/user/profile`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function checkAuth() {
+  try {
+    const res = await axios.get(`${HOST}/api/v1/user/protected`);
+    const data = res.data;
+    if (data.role !== 'admin') {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
   }
 }

@@ -10,8 +10,16 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useAppDispatch } from '@/hooks/redux-hook';
+import { clearUser } from '@/redux/features/auth/authSlice';
+import { useRouter } from '@/routes/hooks';
 export default function UserNav() {
+  const { user } = useSelector((state: RootState) => state.auth);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,9 +38,9 @@ export default function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{'Admin'}</p>
+            <p className="text-sm font-medium leading-none">{user?.username}</p>
             <p className="text-xs leading-none text-muted-foreground">
-              {'admin@gmail.com'}
+              {user?.email}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -53,7 +61,12 @@ export default function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => console.log('logout')}>
+        <DropdownMenuItem
+          onClick={() => {
+            dispatch(clearUser());
+            router.replace('/login');
+          }}
+        >
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
