@@ -23,7 +23,10 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'createdAt',
     header: 'CREATED AT',
-    cell: ({ row }) => new Date(row.getValue('createdAt')).toLocaleTimeString()
+    cell: ({ row }) =>
+      new Date(row.getValue('createdAt')).toLocaleTimeString() +
+      ' ' +
+      new Date(row.getValue('createdAt')).toLocaleDateString()
   },
   {
     id: 'actions',

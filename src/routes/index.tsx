@@ -5,6 +5,8 @@ import ProductDetailPage from '@/pages/product/detail';
 import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import UserPage from '@/pages/user';
+import OrderListPage from '@/pages/order';
+import OrderDetailPage from '@/pages/order/order-detail';
 const DashboardLayout = lazy(
   () => import('@/components/layout/dashboard-layout')
 );
@@ -62,6 +64,14 @@ export default function AppRouter() {
         {
           path: 'user',
           element: <UserPage />
+        },
+        {
+          path: 'order',
+          element: <OrderListPage />
+        },
+        {
+          path: 'order/:orderId',
+          element: <OrderDetailPage />
         }
       ]
     }

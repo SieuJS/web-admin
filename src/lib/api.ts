@@ -165,5 +165,59 @@ export async function banUser({ id, isBan }: { id: string; isBan: boolean }) {
       console.log(error);
       return error;
     }
+  } else {
+    try {
+      const res = await axios.patch(`${HOST}/api/v1/user/unban/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+}
+
+export async function getOrders(
+  status: string,
+  page: number,
+  pageLimit: number,
+  orderBy: string,
+  order: string
+) {
+  try {
+    const res = await axios.get(
+      `${HOST}/api/v1/order/getlist?page=${page}&limit=${pageLimit}&orderBy=${orderBy}&order=${order}&status=${status === 'all' ? '' : status}`
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function updateOrder({ orderId, status }) {
+  try {
+    const res = await axios.patch(
+      `${HOST}/api/v1/order/update/${orderId}`,
+      { status },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+export async function getOrder(orderId: string) {
+  try {
+    const res = await axios.get(`${HOST}/api/v1/order/info/${orderId}`);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
   }
 }

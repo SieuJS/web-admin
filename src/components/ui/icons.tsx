@@ -15,7 +15,6 @@ import {
   LayoutDashboardIcon,
   Loader2,
   LogIn,
-  LucideIcon,
   LucideProps,
   Moon,
   MoreVertical,
@@ -29,7 +28,8 @@ import {
   User2Icon,
   UserX2Icon,
   X,
-  PackageSearchIcon
+  PackageSearchIcon,
+  BookA
 } from 'lucide-react';
 
 export const Icons = {
@@ -60,6 +60,7 @@ export const Icons = {
   moon: Moon,
   laptop: Laptop,
   product: PackageSearchIcon,
+  order: BookA,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

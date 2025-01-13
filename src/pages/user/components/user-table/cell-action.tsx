@@ -24,7 +24,19 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
   const { mutate: banUser, isPending, isSuccess } = useBanUser();
   const onConfirm = async () => {
-    await banUser(banId);
+    if (banId !== '') {
+      await banUser({
+        id: banId,
+        isBan: true
+      });
+    } else {
+      console.log('unBanId', unBanId);
+      await banUser({
+        id: unBanId,
+        isBan: false
+      });
+    }
+    router.reload();
   };
 
   return (
@@ -66,7 +78,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           {data.status === 'banned' && (
             <DropdownMenuItem
               onClick={() => {
-                setBanId(data.id);
+                setUnBanId(data.id);
                 setOpen(true);
               }}
             >

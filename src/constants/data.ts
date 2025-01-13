@@ -26,6 +26,12 @@ export const navItems: NavItem[] = [
     label: 'User'
   },
   {
+    title: 'Order',
+    href: '/order',
+    icon: 'order',
+    label: 'Order'
+  },
+  {
     title: 'Login',
     href: '/login',
     icon: 'login',
@@ -186,4 +192,12 @@ export type User = {
   role: string;
   createdAt: Date;
   status: string;
+};
+
+export type Order = {
+  id: string;
+  order_of_user: User;
+  totalPrice: number;
+  status: string;
+  orderDate: Date;
 };
