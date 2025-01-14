@@ -40,13 +40,6 @@ import {
   loadAllCategories
 } from '@/redux/features/category/categorySlice';
 import { useCreateProduct } from './queries/queries';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select';
 const options = {
   apiKey: 'public_12a1zEmARBeezfGPFXGCm3iswBmL', // This is your API key.
   maxFileCount: 1,
@@ -226,22 +219,11 @@ export default function ProductCreatePage() {
                     <FormLabel>Status</FormLabel>
 
                     <FormControl>
-                      <Select {...field}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Enter product status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem key="active" value="instock">
-                            In stock
-                          </SelectItem>
-                          <SelectItem key="active" value="outofstock">
-                            Out of stock
-                          </SelectItem>
-                          <SelectItem key="suspend" value="suspend">
-                            Suspending
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <Input
+                        placeholder="Enter product status"
+                        {...field}
+                        className="px-4 py-6 shadow-inner drop-shadow-xl"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
