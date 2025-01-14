@@ -30,11 +30,10 @@ import MasterCategorySelecter from './components/category/master-category-select
 import SubCategorySelecter from './components/category/sub-category-selecter';
 import { useRouter } from '@/routes/hooks';
 import { useEffect, useState } from 'react';
-import { UploadButton, UploadDropzone } from '@bytescale/upload-widget-react';
+import { UploadButton } from '@bytescale/upload-widget-react';
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -64,7 +63,7 @@ const options = {
 };
 export default function ProductDetailPage() {
   const dispatch = useDispatch();
-  const { mutate, isPending, isSuccess } = useUpdateProduct();
+  const { mutate, isPending } = useUpdateProduct();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const params = useParams();
   useEffect(() => {

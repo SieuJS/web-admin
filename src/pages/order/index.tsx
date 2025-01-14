@@ -20,7 +20,7 @@ export default function OrderListPage() {
     order
   );
   const orders = data?.data;
-  const totalOrders = data?.meta.total;
+
   const pageCount = data?.meta.lastPage;
   if (isLoading) {
     return (

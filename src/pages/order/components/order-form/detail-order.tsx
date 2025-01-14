@@ -23,7 +23,7 @@ export function ModelDetailOrder({
   onOpenChange
 }: TModelSelectStatusProps) {
   console.log(orderId);
-  const { data, isLoading } = useGetDetailOrder(orderId);
+  const { data } = useGetDetailOrder(orderId);
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>

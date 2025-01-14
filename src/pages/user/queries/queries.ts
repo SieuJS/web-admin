@@ -1,4 +1,4 @@
-import { banUser, getListUser, UserQuery } from '@/lib/api';
+import { banUser, getListUser } from '@/lib/api';
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 

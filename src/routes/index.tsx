@@ -2,7 +2,7 @@ import FormPage from '@/pages/form';
 import NotFound from '@/pages/not-found';
 import ProductCreatePage from '@/pages/product/create';
 import ProductDetailPage from '@/pages/product/detail';
-import { Suspense, lazy, useEffect } from 'react';
+import { Suspense, lazy } from 'react';
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
 import UserPage from '@/pages/user';
 import OrderListPage from '@/pages/order';

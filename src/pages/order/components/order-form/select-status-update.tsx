@@ -35,12 +35,7 @@ export function ModelSelectStatusUpdate({
   const [selectedStatus, setSelectedStatus] = useState(
     status.toLocaleLowerCase()
   );
-  const {
-    mutate: updateOrder,
-    isPending,
-    isSuccess,
-    isError
-  } = useUpdateOrder();
+  const { mutate: updateOrder, isSuccess, isError } = useUpdateOrder();
   const onConfirm = async () => {
     await updateOrder({
       orderId: orderId,

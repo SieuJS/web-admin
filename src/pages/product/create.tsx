@@ -15,7 +15,6 @@ import {
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -61,7 +60,7 @@ const options = {
 };
 export default function ProductCreatePage() {
   const dispatch = useDispatch();
-  const { mutate, isPending, isSuccess } = useCreateProduct();
+  const { mutate, isPending } = useCreateProduct();
   useEffect(() => {
     getSubCategories('all').then((data) => {
       dispatch(loadAllCategories(data));

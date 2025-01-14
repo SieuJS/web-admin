@@ -3,10 +3,8 @@ import {
   getProductById,
   getProducts,
   getSubCategories,
-  ProductFormSchemaType,
   updateProduct,
-  uploadProduct,
-  getListUser
+  uploadProduct
 } from '@/lib/api';
 import { useQuery, useMutation } from '@tanstack/react-query';
 
