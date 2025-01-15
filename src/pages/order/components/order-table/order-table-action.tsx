@@ -1,12 +1,11 @@
+import OrderSortForm from '../order-form/select-create-time-order';
 import SelectStatus from '../order-form/selectStatus';
 
 export default function OrderTableActions() {
   return (
-    <div className="mb-3 flex items-center justify-between">
+    <div className="mb-3 grid grid-cols-3 gap-3">
       <SelectStatus />
-      <div>
-        <button className="btn btn-primary">Export</button>
-      </div>
+      <OrderSortForm />
     </div>
   );
 }
