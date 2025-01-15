@@ -6,6 +6,13 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
 import {
   ProductFormSchemaType,
@@ -219,11 +226,30 @@ export default function ProductCreatePage() {
                     <FormLabel>Status</FormLabel>
 
                     <FormControl>
-                      <Input
-                        placeholder="Enter product status"
-                        {...field}
-                        className="px-4 py-6 shadow-inner drop-shadow-xl"
-                      />
+                      <Select
+                        value={form.getValues('status')}
+                        onValueChange={(value: any) =>
+                          form.setValue('status', value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue
+                            defaultValue={'instock'}
+                            placeholder="Enter product status"
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem key="instock" value="instock">
+                            In stock
+                          </SelectItem>
+                          <SelectItem key="outofstock" value="outstock">
+                            Out of stock
+                          </SelectItem>
+                          <SelectItem key="suspend" value="suspend">
+                            Suspending
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
