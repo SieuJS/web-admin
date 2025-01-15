@@ -100,6 +100,10 @@ export default function AppRouter() {
     {
       path: '/404',
       element: <NotFound />
+    },
+    {
+      path: '*',
+      element: <Navigate to="/login" replace />
     }
   ];
 
